@@ -1,5 +1,6 @@
 const Shop = require("../models/shop");
 const Television = require("../models/television");
+const mongoose = require("mongoose");
 
 
 
@@ -57,13 +58,30 @@ const postShop = async (req, res, next) => {
 }
 const putShop = async (req, res, next) => {
     try {
-        let { id } = req.params;
+        let { id } = req.params; 
+        let { televisiones} = req.body; 
+        
+        if (req.body.televisiones) { 
         let oldShop = await Shop.findById(id);
-        let newShop = new Shop(req.body);
-        newShop._id = id;
-        newShop.televisiones = [...oldShop.televisiones, ...req.body.televisiones];
-        let updatedShop = await Shop.findByIdAndUpdate(id, newShop, {new: true});
+
+        let existingTelevisionIds = new Set(oldShop.televisiones.map(tvId => tvId.toString()));
+        
+        let newTvs = televisiones.filter(newTv => !existingTelevisionIds.has(newTv));
+
+      if (newTvs.length > 0) {
+        let updatedShop = await Shop.findByIdAndUpdate(id, { $addToSet: { televisiones: { $each: newTvs } }}, {new: true});
         return res.status(200).json(updatedShop);
+        }
+        else  {
+        return res.status(400).json('Ningún televisor nuevo ha sido incluido')
+        }
+        }
+        else{
+     /*   let newShop = new Shop(req.body);
+        newShop._id = id;*/
+        let updatedShop = await Shop.findByIdAndUpdate(id, {...req.body}, {new: true});
+        return res.status(200).json(updatedShop);
+        }
     } catch (error) {
         return res.status(404).json("Ha fallado la actualización")
     }
@@ -85,7 +103,7 @@ const deleteTvInShop = async (req, res, next) => {
         let shop= await Shop.findById(idShop); 
         const tvIndex = shop.televisiones.indexOf(idTelevision); 
     if (tvIndex === -1) {
-      return res.status(404).json({ message: 'Televisión no disponible en esta tienda' });
+      return res.status(404).json('Televisión no disponible en esta tienda' );
     }
     shop.televisiones.splice(tvIndex, 1); 
     await shop.save(); 

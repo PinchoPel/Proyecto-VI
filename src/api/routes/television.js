@@ -2,10 +2,9 @@ const  {getTelevision, postTelevision, putTelevision, deleteTelevision, getByPri
 
 const televisionRoutes = require("express").Router();
 
-televisionRoutes.get("/maxprecio/:precio", getByPriceTelevision);//buscar televisor por precio máximo
-
-televisionRoutes.get("/maxpulgadas/:screenSize", getBySizeTelevision);//buscar televisor por máximo de pulgadas
-televisionRoutes.get("/marca/:marca", getByBrandTelevision);//buscar una marca de televisión (no aparece en qué tienda está)
+televisionRoutes.get("/maxprecio/:precio", getByPriceTelevision);
+televisionRoutes.get("/maxpulgadas/:screenSize", getBySizeTelevision);
+televisionRoutes.get("/marca/:marca", getByBrandTelevision);
 televisionRoutes.get("/", getTelevision);
 
 televisionRoutes.post("/", postTelevision);

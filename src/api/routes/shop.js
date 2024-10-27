@@ -3,10 +3,8 @@ const { getShop, postShop, putShop, deleteShop, getByCity, deleteTvInShop, getTv
 
 const shopsRoutes = require("express").Router();
 
-shopsRoutes.get("/ciudad/:ciudad", getByCity);//buscar una tienda en una ciudad
-
-shopsRoutes.get("/marca/:marca", getTvInShop);//buscar qué tiendas trabajan con una marca determinada
-
+shopsRoutes.get("/ciudad/:ciudad", getByCity);
+shopsRoutes.get("/marca/:marca", getTvInShop);
 shopsRoutes.get("/", getShop);
 
 shopsRoutes.post("/", postShop);
@@ -14,7 +12,6 @@ shopsRoutes.post("/", postShop);
 shopsRoutes.put("/:id", putShop);
 
 shopsRoutes.delete("/:id", deleteShop);
-
-shopsRoutes.delete("/:idShop/television/:idTelevision", deleteTvInShop); //borrar una televisión de una tienda en concreto
+shopsRoutes.delete("/:idShop/television/:idTelevision", deleteTvInShop); 
 
 module.exports = shopsRoutes;
